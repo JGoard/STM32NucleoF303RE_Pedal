@@ -1,0 +1,50 @@
+{
+  "configurations": [
+    {
+      "name": "windows-gcc-x64",
+      "includePath": [
+        "${workspaceFolder}/**"
+      ],
+      "defines": [
+        "_DEBUG",
+        "UNICODE",
+        "_UNICODE",
+        "USE_HAL_DRIVER",
+        "STM32F303xE"
+      ],
+      "cStandard": "c11",
+      "cppStandard": "c++17",
+      "intelliSenseMode": "windows-gcc-x64",
+      "compilerPath": "${env:ARMGCC_DIR}/arm-none-eabi-gcc.exe",
+      "compilerArgs": [
+        "-mcpu=cortex-m4",
+        "-mthumb"
+      ]
+    },
+    {
+      "name": "STM32",
+      "includePath": [
+        "${workspaceFolder}/**",
+        "Core/Inc",
+        "Drivers/CMSIS/Device/ST/STM32F3xx/Include",
+        "Drivers/CMSIS/Include",
+        "Drivers/STM32F3xx_HAL_Driver/Inc",
+        "Drivers/STM32F3xx_HAL_Driver/Inc/Legacy"
+      ],
+      "defines": [
+        "_DEBUG",
+        "STM32F303xE",
+        "USE_HAL_DRIVER"
+      ],
+      "cStandard": "c11",
+      "cppStandard": "c++17",
+      "intelliSenseMode": "gcc-arm",
+      "compilerPath": "C:\\USERS\\JOSHGOARD\\EMBEDDED TOOLCHAINS\\ARM-GNU-TOOLCHAIN-12.2.MPACBTI-BET1-MINGW-W64-I686-ARM-NONE-EABI\\BIN\\ARM-NONE-EABI-GCC.EXE",
+      "compilerArgs": [
+        "-mcpu=cortex-m4",
+        "-mthumb"
+      ]
+    }
+  ],
+  "version": 4
+}
