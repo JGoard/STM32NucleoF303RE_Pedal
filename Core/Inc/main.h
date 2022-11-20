@@ -28,7 +28,6 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f3xx_hal.h"
-#include "stdint.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -66,12 +65,6 @@ void Error_Handler(void);
 #define B7_GPIO_Port GPIOA
 #define SIG_OUT_Pin GPIO_PIN_4
 #define SIG_OUT_GPIO_Port GPIOA
-#define SPI1_SCLK_Pin GPIO_PIN_5
-#define SPI1_SCLK_GPIO_Port GPIOA
-#define SPI1_MISO_Pin GPIO_PIN_6
-#define SPI1_MISO_GPIO_Port GPIOA
-#define SPI1_MOSI_Pin GPIO_PIN_7
-#define SPI1_MOSI_GPIO_Port GPIOA
 #define B6_Pin GPIO_PIN_7
 #define B6_GPIO_Port GPIOC
 #define SPI_RST_Pin GPIO_PIN_8

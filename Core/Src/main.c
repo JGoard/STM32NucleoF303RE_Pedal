@@ -21,6 +21,7 @@
 #include "adc.h"
 #include "dac.h"
 #include "dma.h"
+#include "spi.h"
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
@@ -47,6 +48,18 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+//Create ADC//DAC Buffer
+//nUMBER OF sAMPLE USER ACCESS PER DATA BLOCK
+#define DATASIZE 128
+//FULL DATABUFFFER SIZE
+#define FULLBUFF 256
+
+uint32_t adc_val[FULLBUFF];
+uint32_t dac_val[FULLBUFF];
+
+//Pointers to the half-buffer which should be processed
+static volatile uint32_t *inbufPtr;
+static volatile uint32_t *outbufPtr;
 
 /* USER CODE END PV */
 
@@ -58,9 +71,27 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+__weak void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc){
+  //First half of the ADC Buffer is now full
+  inbufPtr = &adc_val[0];
+  outbufPtr = &dac_val[DATASIZE];
+}
 
+__weak void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc){
+  inbufPtr = &adc_val[DATASIZE];
+  outbufPtr = &dac_val[0];
+}
 /* USER CODE END 0 */
 
+//PLaceholder for DSP Function Block
+void processDSP(void){
+for (int i = 0; i < DATASIZE; i++)
+{
+  outbufPtr[i] = inbufPtr[i];
+}
+
+
+}
 /**
   * @brief  The application entry point.
   * @retval int
@@ -94,24 +125,26 @@ int main(void)
   MX_DAC1_Init();
   MX_TIM6_Init();
   MX_USART1_UART_Init();
+  MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
+  //Startime Timer 6 For ADC conversion
+  HAL_TIM_Base_Start(&htim6);
+  HAL_ADC_Start_DMA(&hadc1, (uint32_t*) adc_val,FULLBUFF);
+  HAL_DAC_Start_DMA(&hdac1, DAC_CHANNEL_1, (uint32_t*) dac_val, FULLBUFF,DAC_ALIGN_12B_R);
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  char *message = "HelloWorld!\r\n";
   while (1)
   {
-    HAL_GPIO_TogglePin(GPIOA, 5);
-    HAL_Delay(100);
-
-     if (HAL_GPIO_ReadPin(B1_GPIO_Port,B1_Pin) == GPIO_PIN_RESET){
-       HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen(message),100);
-     }
+    /* USER CODE END WHILE */
+  processDSP();
+    /* USER CODE BEGIN 3 */
+  }
   /* USER CODE END 3 */
 }
-}
+
 /**
   * @brief System Clock Configuration
   * @retval None
