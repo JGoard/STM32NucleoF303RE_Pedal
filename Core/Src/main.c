@@ -25,6 +25,7 @@
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
+#include "nokia5110_LCD.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -126,14 +127,15 @@ int main(void)
   MX_TIM6_Init();
   MX_USART1_UART_Init();
   MX_SPI1_Init();
-  /* USER CODE BEGIN 2 */
   //Startime Timer 6 For ADC conversion
   HAL_TIM_Base_Start(&htim6);
   HAL_ADC_Start_DMA(&hadc1, (uint32_t*) adc_val,FULLBUFF);
   HAL_DAC_Start_DMA(&hdac1, DAC_CHANNEL_1, (uint32_t*) dac_val, FULLBUFF,DAC_ALIGN_12B_R);
 
   /* USER CODE END 2 */
-
+  LCD_GPIOInit();
+  LCD_init();
+  LCD_PrintInit();
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)

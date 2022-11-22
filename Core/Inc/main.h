@@ -83,6 +83,13 @@ void Error_Handler(void);
 #define SCE_GPIO_Port GPIOB
 #define RST_Pin GPIO_PIN_9
 #define RST_GPIO_Port GPIOB
+
+#define FIRST_ROW       0
+#define SECOND_ROW      1
+#define THIRD_ROW       2
+#define FOURTH_ROW      3
+#define FIFTH_ROW       4
+#define SIXTH_ROW       5
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
