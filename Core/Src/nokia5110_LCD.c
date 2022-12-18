@@ -14,11 +14,11 @@ extern GPIO_InitTypeDef GPIO_InitStruct;
  */
 
 void LCD_GPIOInit(void){
-  LCD_setRST(GPIOA, SPI_RST_Pin);
- 	LCD_setCE(GPIOA, SPI_CE_Pin);
-  LCD_setDC(GPIOA, GPIO_PIN_7); //MOSI              
-  LCD_setDIN(GPIOA, GPIO_PIN_6); //MISO
-  LCD_setCLK(GPIOA, GPIO_PIN_5); //SCK
+  LCD_setRST(LCD_PORT, LCD_RST_PIN);
+ 	LCD_setCE(LCD_PORT, LCD_CE_PIN);
+  LCD_setDC(LCD_PORT, LCD_DC_PIN);//MOSI
+  LCD_setDIN(LCD_PORT, LCD_DIN_PIN);//MISO
+  LCD_setCLK(LCD_PORT, LCD_CLK_PIN);//SCK
 }
 
 void LCD_setRST(GPIO_TypeDef* PORT, uint16_t PIN){

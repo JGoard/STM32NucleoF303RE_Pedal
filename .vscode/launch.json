@@ -15,24 +15,24 @@
       ],
       "svdFile": "./STM32F303.svd"
     },
-    // {
-    //   "name": "C/C++ Runner: Debug Session",
-    //   "type": "cppdbg",
-    //   "request": "launch",
-    //   "args": [],
-    //   "stopAtEntry": false,
-    //   "externalConsole": true,
-    //   "cwd": "c:/Users/JoshGoard/Embedded_Projects/STM32NucleoF303RE_GuitarPedal/Core",
-    //   "program": "c:/Users/JoshGoard/Embedded_Projects/STM32NucleoF303RE_GuitarPedal/Core/build/Debug/outDebug",
-    //   "MIMode": "gdb",
-    //   "miDebuggerPath": "${env:ARMGCC_DIR}/arm-none-eabi-gdb.exe",
-    //   "setupCommands": [
-    //     {
-    //       "description": "Enable pretty-printing for gdb",
-    //       "text": "-enable-pretty-printing",
-    //       "ignoreFailures": true
-    //     }
-    //   ]
-    // }
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "cppdbg",
+      "request": "launch",
+      "args": [],
+      "stopAtEntry": false,
+      "externalConsole": true,
+      "cwd": "c:/Users/JoshGoard/Embedded_Projects/STM32NucleoF303RE_GuitarPedal",
+      "program": "c:/Users/JoshGoard/Embedded_Projects/STM32NucleoF303RE_GuitarPedal/build/Debug/outDebug",
+      "MIMode": "gdb",
+      "miDebuggerPath": "${env:ARMGCC_DIR}/arm-none-eabi-gdb.exe",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
+    }
   ]
 }

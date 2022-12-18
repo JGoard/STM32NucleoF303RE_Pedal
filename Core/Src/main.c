@@ -27,124 +27,68 @@
 #include "gpio.h"
 #include "nokia5110_LCD.h"
 
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
 
-/* USER CODE END Includes */
 
-/* Private typedef -----------------------------------------------------------*/
-/* USER CODE BEGIN PTD */
-
-/* USER CODE END PTD */
-
-/* Private define ------------------------------------------------------------*/
-/* USER CODE BEGIN PD */
-/* USER CODE END PD */
-
-/* Private macro -------------------------------------------------------------*/
-/* USER CODE BEGIN PM */
-
-/* USER CODE END PM */
-
-/* Private variables ---------------------------------------------------------*/
-
-/* USER CODE BEGIN PV */
-//Create ADC//DAC Buffer
-//nUMBER OF sAMPLE USER ACCESS PER DATA BLOCK
-#define DATASIZE 128
-//FULL DATABUFFFER SIZE
-#define FULLBUFF 256
-
-uint32_t adc_val[FULLBUFF];
-uint32_t dac_val[FULLBUFF];
-
-//Pointers to the half-buffer which should be processed
-static volatile uint32_t *inbufPtr;
-static volatile uint32_t *outbufPtr;
-
-/* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-/* USER CODE BEGIN PFP */
+/* Private function definitions -----------------------------------------------*/
 
-/* USER CODE END PFP */
+//Create ADC//DAC Buffer
+ volatile uint32_t adc_val[FULLBUFF];
+ volatile uint32_t dac_val[FULLBUFF];
+//Pointers to the half-buffer which should be processed
+ volatile uint32_t *inbufPtr;
+ volatile uint32_t *outbufPtr;
 
-/* Private user code ---------------------------------------------------------*/
-/* USER CODE BEGIN 0 */
-__weak void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc){
-  //First half of the ADC Buffer is now full
-  inbufPtr = &adc_val[0];
-  outbufPtr = &dac_val[DATASIZE];
-}
-
-__weak void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc){
-  inbufPtr = &adc_val[DATASIZE];
-  outbufPtr = &dac_val[0];
-}
-/* USER CODE END 0 */
-
-//PLaceholder for DSP Function Block
-void processDSP(void){
-for (int i = 0; i < DATASIZE; i++)
-{
-  outbufPtr[i] = inbufPtr[i];
-}
+ volatile uint8_t currentState = INIT;
+ extern volatile int lcdClrScreenFlag;
 
 
-}
 /**
   * @brief  The application entry point.
   * @retval int
   */
 int main(void)
 {
-  /* USER CODE BEGIN 1 */
-
-  /* USER CODE END 1 */
-
   /* MCU Configuration--------------------------------------------------------*/
-
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
-
-  /* USER CODE BEGIN Init */
-
-  /* USER CODE END Init */
-
   /* Configure the system clock */
   SystemClock_Config();
-
-  /* USER CODE BEGIN SysInit */
-
-  /* USER CODE END SysInit */
-
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_DMA_Init();
-  MX_ADC1_Init();
-  MX_DAC1_Init();
-  MX_TIM6_Init();
-  MX_USART1_UART_Init();
+  MX_DMA_Init(); //Direct Memory Access Initialization
   MX_SPI1_Init();
-  //Startime Timer 6 For ADC conversion
+  MX_ADC1_Init(); //Signal Into ADC Initialization
+  MX_DAC1_Init(); //Signal Out of DAC Initialization
+  MX_TIM6_Init(); //Timer for ADC1 and DAC1.  Run on samne clock edge
+  //Start Timer 6 For ADC conversion
   HAL_TIM_Base_Start(&htim6);
   HAL_ADC_Start_DMA(&hadc1, (uint32_t*) adc_val,FULLBUFF);
   HAL_DAC_Start_DMA(&hdac1, DAC_CHANNEL_1, (uint32_t*) dac_val, FULLBUFF,DAC_ALIGN_12B_R);
-
-  /* USER CODE END 2 */
+  //LCD Initialization
   LCD_GPIOInit();
   LCD_init();
-  LCD_PrintInit();
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
-  while (1)
-  {
-    /* USER CODE END WHILE */
+  LCD_PrintInit(); //Prints Entry Screen for Pedal
+  
+  volatile bool button_val = FALSE;
+
+  /* Almighty While loop */
+  while (TRUE){
+
+  button_val = BUTTON_PRESSED;//Constantly polling for button press
+  if(!button_val){
+    currentState++; //If pressed, will increment state change
+    lcdClrScreenFlag++;
+    }
+  else if(currentState == STATE_MAX) 
+    currentState = INIT; //if state max has been reached, will return to start
   processDSP();
-    /* USER CODE BEGIN 3 */
+  menuStatemachine();
+  
   }
-  /* USER CODE END 3 */
+
 }
 
 /**
@@ -153,9 +97,9 @@ int main(void)
   */
 void SystemClock_Config(void)
 {
-  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
-  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
-  RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
+  RCC_OscInitTypeDef RCC_OscInitStruct = {INIT};
+  RCC_ClkInitTypeDef RCC_ClkInitStruct = {INIT};
+  RCC_PeriphCLKInitTypeDef PeriphClkInit = {INIT};
 
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.

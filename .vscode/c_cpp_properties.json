@@ -22,7 +22,7 @@
       ]
     },
     {
-      "name": "STM32",
+      "name": "STM32 F3",
       "includePath": [
         "${workspaceFolder}/**",
         "Core/Inc",

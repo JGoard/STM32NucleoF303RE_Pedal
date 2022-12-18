@@ -44,6 +44,7 @@ Core/Src/dma.c \
 Core/Src/tim.c \
 Core/Src/usart.c \
 Core/Src/nokia5110_LCD.c \
+Core/Src/menu-dsp_functions.c \
 Core/Src/stm32f3xx_it.c \
 Core/Src/stm32f3xx_hal_msp.c \
 Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_adc.c \
